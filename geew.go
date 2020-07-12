@@ -2,6 +2,7 @@ package geew
 
 import (
 	"net/http"
+	"strings"
 )
 
 // HandlerFunc defines the request handler used by geew
@@ -46,7 +47,17 @@ func (e *Engine) Run(addr string) error {
 }
 
 // Implement the HTTP ServeHTTP
+// add middlewares
 func (e *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	//c := newContext(w, req)
+	//e.router.handle(c)
+	var ms []HandlerFunc
+	for _, g := range e.groups {
+		if strings.HasPrefix(req.URL.Path, g.prefix) {
+			ms = append(ms, g.middlewares...)
+		}
+	}
 	c := newContext(w, req)
+	c.handlers = ms
 	e.router.handle(c)
 }

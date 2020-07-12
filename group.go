@@ -32,6 +32,11 @@ func (g *group) addRoute(method string, comp string, handler HandlerFunc) {
 	g.engine.router.addRoute(method, pattern, handler)
 }
 
+// Use is defines to add middleware to the group
+func (g *group) Use(ms ...HandlerFunc) {
+	g.middlewares = append(g.middlewares, ms...)
+}
+
 func (g *group) GET(pattern string, handler HandlerFunc) {
 	g.addRoute("GET", pattern, handler)
 }
