@@ -12,11 +12,18 @@ type HandlerFunc func(*Context)
 type Engine struct {
 	//router map[string]HandlerFunc
 	router *router
+	*group
+	// store all groups
+	groups []*group
 }
 
 // New is the constructor of geew.Engine
 func New() *Engine {
-	return &Engine{router: newRouter()}
+	//return &Engine{router: newRouter()}
+	e := &Engine{router: newRouter()}
+	e.group = &group{engine: e}
+	e.groups = []*group{e.group}
+	return e
 }
 
 func (e *Engine) addRoute(method string, pattern string, handler HandlerFunc) {
