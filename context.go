@@ -3,6 +3,7 @@ package geew
 import (
 	"encoding/json"
 	"fmt"
+	"mime/multipart"
 	"net/http"
 )
 
@@ -42,16 +43,38 @@ func (c *Context) Next() {
 }
 
 func (c *Context) PostForm(key string) string {
+	c.Req.ParseMultipartForm(MaxMultipartMemory)
 	return c.Req.FormValue(key)
 }
 
 func (c *Context) Query(key string) string {
+	c.Req.ParseMultipartForm(MaxMultipartMemory)
 	return c.Req.URL.Query().Get(key)
 }
 
 func (c *Context) Param(key string) string {
+	c.Req.ParseMultipartForm(MaxMultipartMemory)
 	v, _ := c.Params[key]
 	return v
+}
+
+func (c *Context) FormFile(name string) (*multipart.FileHeader, error) {
+	if c.Req.MultipartForm == nil {
+		if err := c.Req.ParseMultipartForm(MaxMultipartMemory); err != nil {
+			return nil, err
+		}
+	}
+	f, fh, err := c.Req.FormFile(name)
+	if err != nil {
+		return nil, err
+	}
+	f.Close()
+	return fh, err
+}
+
+func (c *Context) MultipartForm() (*multipart.Form, error) {
+	err := c.Req.ParseMultipartForm(MaxMultipartMemory)
+	return c.Req.MultipartForm, err
 }
 
 func (c *Context) Status(code int) {

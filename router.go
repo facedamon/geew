@@ -1,6 +1,7 @@
 package geew
 
 import (
+	"fmt"
 	"net/http"
 	"strings"
 )
@@ -93,7 +94,10 @@ func (r *router) handle(c *Context) {
 	} else {
 		//c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
 		c.handlers = append(c.handlers, func(c *Context) {
-			c.String(http.StatusNotFound, "404 NOT FOUND: %s\n", c.Path)
+			c.JSON(http.StatusNotFound, H{
+				"code": http.StatusNotFound,
+				"msg": fmt.Sprintf("404 NOT FOUND: %s\n", c.Path),
+			})
 		})
 	}
 	c.Next()

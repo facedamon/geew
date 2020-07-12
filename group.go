@@ -1,7 +1,5 @@
 package geew
 
-import "log"
-
 // group defines the router group
 type group struct {
 	prefix string
@@ -28,7 +26,7 @@ func (g *group) Group(prefix string) *group {
 
 func (g *group) addRoute(method string, comp string, handler HandlerFunc) {
 	pattern := g.prefix + comp
-	log.Printf("route %4s - %s", method, pattern)
+	L.Info("route %4s - %s", method, pattern)
 	g.engine.router.addRoute(method, pattern, handler)
 }
 

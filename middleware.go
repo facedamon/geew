@@ -2,7 +2,6 @@ package geew
 
 import (
 	"fmt"
-	"log"
 	"runtime"
 	"strings"
 	"time"
@@ -13,7 +12,7 @@ func TimerOperation() HandlerFunc {
 	return func(c *Context) {
 		t := time.Now()
 		c.Next()
-		log.Printf("[%d] %s in %v ", c.StatusCode, c.Req.RequestURI, time.Since(t))
+		L.Info("[%d] %s in %v ", c.StatusCode, c.Req.RequestURI, time.Since(t))
 	}
 }
 
@@ -23,7 +22,7 @@ func Recovery() HandlerFunc {
 		defer func() {
 			if err := recover(); err != nil {
 				message := fmt.Sprintf("%s", err)
-				log.Printf("%s\n\n", trace(message))
+				L.Info("%s\n\n", trace(message))
 			}
 		}()
 		c.Next()

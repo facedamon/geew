@@ -9,6 +9,8 @@ import (
 //type HandlerFunc func(http.ResponseWriter, *http.Request)
 type HandlerFunc func(*Context)
 
+const MaxMultipartMemory = 32 << 40
+
 // Engine implement the interface of ServeHTTP
 type Engine struct {
 	//router map[string]HandlerFunc
