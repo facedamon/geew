@@ -96,7 +96,7 @@ func (r *router) handle(c *Context) {
 		c.handlers = append(c.handlers, func(c *Context) {
 			c.JSON(http.StatusNotFound, H{
 				"code": http.StatusNotFound,
-				"msg": fmt.Sprintf("404 NOT FOUND: %s\n", c.Path),
+				"msg":  fmt.Sprintf("404 NOT FOUND: %s\n", c.Path),
 			})
 		})
 	}

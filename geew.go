@@ -9,6 +9,17 @@ import (
 //type HandlerFunc func(http.ResponseWriter, *http.Request)
 type HandlerFunc func(*Context)
 
+// HandlersChain defines a HandlerFunc array
+type HandlersChain []HandlerFunc
+
+// Last returns the last handler in the chain
+func (h HandlersChain) Last() HandlerFunc {
+	if length := len(h); length > 0 {
+		return h[length-1]
+	}
+	return nil
+}
+
 const MaxMultipartMemory = 32 << 40
 
 // Engine implement the interface of ServeHTTP
